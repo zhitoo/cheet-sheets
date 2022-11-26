@@ -1,0 +1,19 @@
+services:
+        rabbitmq:
+               image: rabbitmq:3.8-management-alpine
+               container_name: rabbitmq
+               
+               ports: 
+                - 5673:5672 # (erlang) communication between the nodes and CLI tool
+                - 15673:15672 # communication with the web management API 
+               
+               volumes:
+                # data persistence
+                - /your/path:/var/lib/rabbitmq/
+                # data mapping -> host: container
+                # queues and messages data of the container will be stored on the host
+               environment:
+                - RABBITMQ_DEFAULT_USER=root
+                - RABBITMQ_DEFAULT_PASS=pasdAS12aaSD
+
+               restart: always
