@@ -1,0 +1,41 @@
+version: '3'
+services:
+    mysql:
+        image: 'mysql/mysql-server:8.0'
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: 'changeme'
+            MYSQL_ROOT_HOST: "%"
+            MYSQL_USER: 'default'
+            MYSQL_PASSWORD: 'changeme'
+            MYSQL_ALLOW_EMPTY_PASSWORD: 1
+        container_name: mysql
+        volumes:
+            - 'mysql-data:/var/lib/mysql'
+        networks:
+            - nginxproxymanager_default
+        healthcheck:
+            test: [ "CMD", "mysqladmin", "ping", "-p changeme" ]
+            retries: 3
+            timeout: 5s
+    phpmyadmin:
+        depends_on:
+            - mysql
+        image: phpmyadmin/phpmyadmin
+        restart: always
+        container_name: phpmyadmin
+        ports:
+            - '8585:80'
+        environment:
+            PMA_HOST: mysql
+            MYSQL_ROOT_PASSWORD: 'changeme'
+            UPLOAD_LIMIT: 1024M
+        networks:
+            - nginxproxymanager_default
+
+volumes:
+    mysql-data:
+        driver: local
+networks:
+   nginxproxymanager_default:
+     external: true
