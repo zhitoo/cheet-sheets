@@ -1,0 +1,21 @@
+version: "3"
+services:
+  redis:
+    image: "docker.arvancloud.ir/redis:alpine"
+    restart: always
+    container_name: redis
+    volumes:
+      - "redis-data:/data"
+    networks:
+      - share_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      retries: 3
+      timeout: 5s
+
+volumes:
+  redis-data:
+    driver: local
+networks:
+  share_network:
+    external: true

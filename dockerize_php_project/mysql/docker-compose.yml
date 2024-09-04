@@ -1,0 +1,43 @@
+version: "3"
+services:
+  mysql:
+    image: "docker.arvancloud.ir/mysql/mysql-server:8.0"
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: "password"
+      MYSQL_ROOT_HOST: "%"
+      MYSQL_USER: "default"
+      MYSQL_PASSWORD: "password"
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+    container_name: mysql
+    volumes:
+      - "mysql-data:/var/lib/mysql"
+    networks:
+      - share_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-p password"]
+      retries: 3
+      timeout: 5s
+  phpmyadmin:
+    depends_on:
+      - mysql
+    image: docker.arvancloud.ir/phpmyadmin/phpmyadmin
+    restart: always
+    container_name: phpmyadmin
+    ports:
+      - "8585:80"
+    environment:
+      PMA_HOST: mysql
+      MYSQL_ROOT_PASSWORD: "password"
+      UPLOAD_LIMIT: 1024M
+    networks:
+      - share_network
+
+volumes:
+  mysql-data:
+    driver: local
+networks:
+  share_network:
+    external: true
