@@ -12,6 +12,7 @@ services:
     tty: true
     volumes:
       - ./:/var/www/html
+      - ./docker-files/runtimes/php8.3/www.conf:/usr/local/etc/php-fpm.d/www.conf
       - ./docker-files/runtimes/php8.3/local.ini:/usr/local/etc/php/conf.d/local.ini
     networks:
       - share_network
