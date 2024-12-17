@@ -1,38 +1,48 @@
 version: "3"
 services:
-  php:
-    build:
-      context: ./docker-files/runtimes/php8.3
-      dockerfile: Dockerfile
-      args:
-        USER_ID: 1000
-        GROUP_ID: 1000
-    restart: unless-stopped
+    php:
+        build:
+            context: ./docker-files/runtimes/php8.3
+            dockerfile: Dockerfile
+            args:
+                USER_ID: 1000
+                GROUP_ID: 1000
+        restart: unless-stopped
     container_name: php-${COMPOSE_PROJECT_NAME}
-    tty: true
-    volumes:
-      - ./:/var/www/html
-      - ./docker-files/runtimes/php8.3/www.conf:/usr/local/etc/php-fpm.d/www.conf
-      - ./docker-files/runtimes/php8.3/local.ini:/usr/local/etc/php/conf.d/local.ini
-    networks:
-      - share_network
-  nginx:
-    image: docker.arvancloud.ir/nginx:alpine
-    restart: unless-stopped
-    tty: true
+        tty: true
+        volumes:
+            - ./:/var/www/html
+            - ./docker-files/runtimes/php8.3/www.conf:/usr/local/etc/php-fpm.d/www.conf
+            - ./docker-files/runtimes/php8.3/local.ini:/usr/local/etc/php/conf.d/local.ini
+        networks:
+            - share_network
+        logging:
+            driver: "json-file"
+            options:
+                max-size: "10m"
+                max-file: "5"
+    nginx:
+        image: docker.arvancloud.ir/nginx:alpine
+        restart: unless-stopped
+        tty: true
     container_name: nginx-${COMPOSE_PROJECT_NAME}
-    ports:
-      - "${NGINX_PORT}:80"
-    volumes:
-      - ./:/var/www/html
-      - ./docker-files/nginx/conf.d/:/etc/nginx/conf.d/
-    links:
-      - php
-    depends_on:
-      - php
-    networks:
-      - share_network
+        ports:
+            - "${NGINX_PORT}:80"
+        volumes:
+            - ./:/var/www/html
+            - ./docker-files/nginx/conf.d/:/etc/nginx/conf.d/
+        links:
+            - php
+        depends_on:
+            - php
+        networks:
+            - share_network
+        logging:
+            driver: "json-file"
+            options:
+                max-size: "10m"
+                max-file: "5"
 
 networks:
-  share_network:
-    external: true
+    share_network:
+        external: true

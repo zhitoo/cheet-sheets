@@ -1,6 +1,8 @@
-FROM docker.arvancloud.ir/php:8.3-fpm
-# Install dependencies
-RUN apt-get update && apt-get install -y build-essential libonig-dev libpng-dev libzip-dev libjpeg62-turbo-dev \
+FROM dunglas/frankenphp
+ 
+RUN install-php-extensions \
+    pcntl
+    RUN apt-get update && apt-get install -y build-essential libonig-dev libpng-dev libzip-dev libjpeg62-turbo-dev \
     libfreetype6-dev locales zip jpegoptim optipng pngquant gifsicle nano unzip git curl
 
 # Clear cache
@@ -31,29 +33,7 @@ RUN docker-php-ext-install ftp
 RUN docker-php-ext-install bcmath
 RUN apt-get install libpq-dev -y
 RUN docker-php-ext-install pdo pdo_pgsql
-
-# RUN pecl install redis \
-# && docker-php-ext-enable redis \
-# && rm -rf /tmp/pear
-
-# Install dependencies
-RUN apt-get update && apt-get install -y \
-    libssl-dev \
-    pkg-config \
-    && pecl install redis \
-    && docker-php-ext-enable redis \
-    && apt-get purge -y --auto-remove libssl-dev pkg-config \
-    && rm -rf /var/lib/apt/lists/*
-
-#get composer
-COPY --from=docker.arvancloud.ir/composer:latest /usr/bin/composer /usr/local/bin/composer
-RUN cd /var/www/html
-
-ARG USER_ID
-ARG GROUP_ID
-RUN addgroup --gid $GROUP_ID user
-RUN adduser --disabled-password --gecos '' --uid $USER_ID --gid $GROUP_ID user
-USER user
-
-EXPOSE 9000
-CMD ["php-fpm"]
+ 
+# COPY . /app
+ 
+# ENTRYPOINT ["php", "artisan", "octane:frankenphp", "--workers=30", "--max-requests=200"]
