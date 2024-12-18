@@ -12,6 +12,8 @@ services:
       MYSQL_PASSWORD: "password"
       MYSQL_ALLOW_EMPTY_PASSWORD: 1
     container_name: mysql
+    command:
+      - '--skip-log-bin'
     volumes:
       - "mysql-data:/var/lib/mysql"
     networks:
@@ -31,7 +33,7 @@ services:
     environment:
       PMA_HOST: mysql
       MYSQL_ROOT_PASSWORD: "password"
-      UPLOAD_LIMIT: 1024M
+      UPLOAD_LIMIT: 2048M
     networks:
       - share_network
 
