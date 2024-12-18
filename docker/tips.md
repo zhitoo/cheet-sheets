@@ -5,5 +5,6 @@
 ```
 2- Add the connected user "$USER" to the docker group. Change the user name to match your preferred user if you do not want to use your current user:
 ```bash
-sudo gpasswd -a $USER docker
+sudo usermod -aG docker $USER
+newgrp docker
 ```
