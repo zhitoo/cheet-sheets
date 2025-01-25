@@ -1,0 +1,28 @@
+services:
+  postgres:
+    container_name: postgres
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: password
+    volumes:
+      - pgdata:/var/lib/postgresql/data 
+    networks:
+      - share_network
+    ports:
+      - 5433:5432
+  adminer:
+    container_name: adminer
+    image: adminer
+    restart: always
+    ports:
+      - 8484:8080
+    networks:
+      - share_network
+ 
+volumes:
+  pgdata:
+
+networks:
+  share_network:
+     external: true
