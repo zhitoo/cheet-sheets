@@ -8,3 +8,9 @@
 sudo usermod -aG docker $USER
 newgrp docker
 ```
+3- remove extra files 
+```bash
+truncate -s 0 /var/lib/docker/containers/**/*-json.log
+docker builder prune --all
+docker image prune --all
+```
