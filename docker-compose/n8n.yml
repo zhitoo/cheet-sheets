@@ -17,7 +17,6 @@ services:
 
 volumes:
   n8n_data:
-    external: true
 networks:
   nginxproxymanager_default:
      external: true
