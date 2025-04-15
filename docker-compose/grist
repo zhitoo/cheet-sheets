@@ -1,0 +1,19 @@
+version: "3"
+services:
+  grist:
+    image: "docker.arvancloud.ir/gristlabs/grist"
+    restart: always
+    container_name: grist
+    volumes:
+      - "grist-data:/persist"
+    ports:
+      - "8484:8484"
+    networks:
+      - share_network
+
+volumes:
+  grist-data:
+    driver: local
+networks:
+  share_network:
+    external: true
