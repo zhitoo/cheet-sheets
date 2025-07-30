@@ -1,0 +1,15 @@
+services:
+  typesense:
+    image:  docker.arvancloud.ir/typesense/typesense:28.0
+    restart: always
+    ports:
+      - "8108:8108"
+    volumes:
+      - ./typesense-data:/data
+    command: '--data-dir /data --api-key=sep2ehrit2apikeyfor3types4ense6sec8ret --enable-cors'
+    networks:
+      - share_network
+
+networks:
+   share_network:
+     external: true
