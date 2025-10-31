@@ -1,0 +1,46 @@
+services:
+    mariadb:
+        image: 'library/mariadb:10.11'
+        restart: always
+        environment:
+            MARIADB_ROOT_PASSWORD: 'password'
+            MARIADB_ROOT_HOST: "%"
+            MARIADB_USER: 'default'
+            MARIADB_PASSWORD: 'password'
+            MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: 'yes'
+        container_name: mariadb
+        command:
+            - '--skip-log-bin'
+        volumes:
+            - 'mariadb-data:/var/lib/mysql'
+        ports:
+            - '3308:3306'
+        networks:
+            - share_network
+        healthcheck:
+            test: ["CMD", "mariadb-admin", "ping", "-ppassword"]
+            retries: 3
+            timeout: 5s
+
+    phpmadmin:
+        depends_on:
+            - mariadb
+        image: phpmyadmin/phpmyadmin
+        restart: always
+        container_name: phpmadmin
+        ports:
+            - '8686:80'
+        environment:
+            PMA_HOST: mariadb
+            MYSQL_ROOT_PASSWORD: 'password'
+            UPLOAD_LIMIT: 1024M
+        networks:
+            - share_network
+
+volumes:
+    mariadb-data:
+        driver: local
+
+networks:
+    share_network:
+        external: true
