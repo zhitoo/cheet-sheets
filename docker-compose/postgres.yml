@@ -1,16 +1,16 @@
 services:
   postgres:
     container_name: postgres
-    image: postgres
+    image: postgres:18
     restart: always
     environment:
       POSTGRES_PASSWORD: password
     volumes:
-      - pgdata:/var/lib/postgresql/data 
+      - pgdata:/var/lib/postgresql/18/main
     networks:
       - share_network
     ports:
-      - 5433:5432
+      - 5432:5432
   adminer:
     container_name: adminer
     image: adminer
