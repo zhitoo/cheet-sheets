@@ -1,5 +1,6 @@
 ### bash
 ```curl -fsSL christitus.com/linux | sh```
+https://www.youtube.com/watch?v=D6HmEi9C5K8
 
 ### my headphone or speaker not working! waht should i do? run below command
 ```alsactl restore```
