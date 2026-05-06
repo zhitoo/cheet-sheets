@@ -1,0 +1,8 @@
+alias k=kubectl
+alias kgp='kubectl get pods'
+alias kgs='kubectl get svc'
+alias kgd='kubectl get deploy'
+alias kdp='kubectl describe pod'
+kxc() {
+  k exec -it $(k get pod -l app=$1 -o name) -- sh
+}
